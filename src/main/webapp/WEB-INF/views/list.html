@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+  <style>
+    ul{
+      display: flex;
+      justify-content: flex-end;
+      gap: 20px;
+      list-style: none;
+    }
+  </style>
+</head>
+<body>
+<h1>List User</h1>
+<a href="/add"> Add new User</a>
+<form action="">
+  <input type="text" name="name" th:value="${name}">
+  <select name="sort">
+    <option value="fullName">FullName</option>
+    <option value="id">id</option>
+  </select>
+  <select name="by">
+    <option value="asc">ASC</option>
+    <option value="desc">DESC</option>
+  </select>
+  <button type="submit">Search</button>
+</form>
+<table border="10" cellpadding="20" cellspacing="10">
+  <tr>
+    <th>ID</th>
+    <th>FullName</th>
+    <th>Username</th>
+    <th>Status</th>
+    <th colspan="2">Action</th>
+  </tr>
+  <tr th:each="u:${list}" th:object="${u}">
+    <td th:text="*{id}"></td>
+    <td th:text="*{fullName}"></td>
+    <td th:text="*{username}"></td>
+    <td th:text="*{status}?'Active':'InActive'"></td>
+    <td><a th:href="@{|/edit/*{id}|}">Edit</a></td>
+    <td><a th:href="@{|/delete/*{id}|}">Delete</a></td>
+  </tr>
+</table>
+<ul>
+  <li><a th:href="@{|/?page=${list.getNumber()-1}&size=${list.getSize()}&name=${name}|}" th:if="${list.hasPrevious()}">Prev</a></li>
+  <li th:text="|${list.getNumber()}/${list.getTotalPages()}|"></li>
+  <li><a th:href="@{|/?page=${list.getNumber()+1}&size=${list.getSize()}&name=${name}|}" th:if="${list.hasNext()}">Next</a></li>
+</ul>
+</body>
+</html>
